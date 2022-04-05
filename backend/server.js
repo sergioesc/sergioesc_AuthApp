@@ -2,6 +2,16 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+dotenv.config()
+
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("conectado correctamente")
+  })
+  .catch((err) => {
+    console.log(err.message)
+  })
 
 const app = express();
 app.use(cors());
