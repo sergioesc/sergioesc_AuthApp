@@ -1,13 +1,16 @@
 import React from "react";
-import * as ReactDOMClient from "react-dom/client";
+import ReactDOM from "react-dom/client";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
+import { AuthProvider } from "./Reducers.js";
 
 const container = document.getElementById("root");
-const root = ReactDOMClient.createRoot(container);
+const root = ReactDOM.createRoot(container);
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>
 );

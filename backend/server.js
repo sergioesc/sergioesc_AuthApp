@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import userRouter from "./routes/userRoute.js"
 dotenv.config()
 
 mongoose
@@ -17,6 +18,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/users", userRouter);
 
 app.get("/", (req, res) => {
   res.send("HOME DEL SERVER");
