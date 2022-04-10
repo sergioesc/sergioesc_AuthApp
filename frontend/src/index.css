@@ -24,3 +24,6 @@ body {
 .loading-container{
     transition: all ease .4s
 }
+.link-style{
+    text-decoration: none;
+}

@@ -53,7 +53,7 @@ export default function Login() {
   };
   useEffect(() => {
     if(userInfo){
-      navigate("/profile")
+      navigate(`/profile/${userInfo._id}`)
     }
   }, [navigate, userInfo])
 
@@ -102,11 +102,6 @@ export default function Login() {
           </Form.Group>
         </Form>
         <Container>
-          {loading ? (
-            <div>Wait the message of confirmation</div>
-          ) : (
-            <div>Register succesfull</div>
-          )}
         </Container>
         <Container>
           <p className="text-muted my-4 text-center">
