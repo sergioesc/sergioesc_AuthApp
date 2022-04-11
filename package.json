@@ -5,15 +5,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "predeploy" : "cd frontend && npm run build",
-    "deploy": "gh-pages -d frontend/build",
+    "build": "cd backend && npm install && cd ../frontend && npm install && npm run build",
     "start": "node backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "gh-pages": "^3.2.3"
-  }
+  "license": "MIT"
 }
