@@ -25,6 +25,7 @@ userRouter.put(
       user.bio = req.body.bio;
       user.fullName = req.body.fullName;
       user.phone = req.body.phone;
+      user.image = req.body.image;
       await user.save();
       res.send({message: "User updated!"})
     }else{

@@ -1,6 +1,6 @@
 import React, { useContext, useState , useEffect} from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Auth } from "../Reducers.js";
 import axios from "axios";
 import { useReducer } from "react";
@@ -102,11 +102,6 @@ export default function Login() {
           </Form.Group>
         </Form>
         <Container>
-        </Container>
-        <Container>
-          <p className="text-muted my-4 text-center">
-            or continue the register with these social profile
-          </p>
         </Container>
       </Container>
     </Container>

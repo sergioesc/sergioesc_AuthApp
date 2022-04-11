@@ -2,12 +2,12 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useReducer } from "react";
 import { useState } from "react";
-import { useContext } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import {useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import NavbarProfile from "../components/Navbar.js";
+import { toast } from "react-toastify";
+import { useContext } from "react";
 import { Auth } from "../Reducers.js";
-import {toast} from "react-toastify";
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -28,7 +28,6 @@ const reducer = (state, action) => {
 };
 
 export default function ProfileScreenEdit() {
-  const { state, dispatch: ctxDispatch } = useContext(Auth);
   const navigate = useNavigate("");
   const params = useParams();
   const { id: userId } = params;
@@ -36,12 +35,15 @@ export default function ProfileScreenEdit() {
     loading: true,
     error: "",
   });
+  const { state, dispatch: ctxDispatch } = useContext(Auth);
+  const { userInfo } = state;
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState();
   const [bio, setBio] = useState("");
-  const [message, setMessage] = useState("");
+  const [image, setImage] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -75,14 +77,33 @@ export default function ProfileScreenEdit() {
         bio,
         fullName,
         phone,
+        image,
       });
       dispatch({ type: "UPDATE_SUCCESS" });
-      toast.success("User updated!")
+      toast.success("User updated!");
       setTimeout(() => {
         navigate(`/profile/${userId}`);
-      },2000)
+      }, 2000);
     } catch (err) {
       dispatch({ type: "UPDATE_FAIL" });
+    }
+  };
+
+  const handleUploadImage = async (e) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append("file", file);
+    toast.info("Loading Image");
+    try {
+      const { data } = await axios.post(
+        "http://localhost:5000/api/upload",
+        bodyFormData
+      );
+      toast.success("Image uploaded! :D");
+      setImage(data.secure_url)
+    } catch (err) {
+      toast.error("Can't upload the image. Try reload the page");
+      console.log(err)
     }
   };
   return (
@@ -92,53 +113,77 @@ export default function ProfileScreenEdit() {
         <h1>Personal info</h1>
         <p>Basic info like your name and photo</p>
       </Container>
-      <Container className="profile-container bg-white text-dark p-3">
-        <Row className="mx-0 border-bottom">
-          <Col xs={12} md={10} className="p-0">
-            <h2>Profile</h2>
-            <p>Some info about the profile</p>
-          </Col>
-        </Row>
-        <Form onSubmit={handleSubmit}>
-          <Row className="mx-0 text-start py-3 border-bottom">
-            <Col xs={4}>PHOTO</Col>
-            <Col xs={8}>una imagen</Col>
-          </Row>
-          <Row className="mx-0 text-start py-3 border-bottom">
-            <Col xs={4}>USERNAME</Col>
-            <Col xs={8}>
-              <Form.Control onChange={(e) => setName(e.target.value)} />
+      {loading ? (
+        <div>Loading Content </div>
+      ) : error ? (
+        <div> Error </div>
+      ) : (
+        <Container className="profile-container bg-white text-dark p-3">
+          <Row className="mx-0 border-bottom">
+            <Col xs={12} md={10} className="p-0">
+              <h2>Profile</h2>
+              <p>Some info about the profile</p>
             </Col>
           </Row>
-          <Row className="mx-0 text-start py-3 border-bottom">
-            <Col xs={4}>BIO</Col>
-            <Col xs={8}>
-              <Form.Control onChange={(e) => setBio(e.target.value)} />
-            </Col>
-          </Row>
-          <Row className="mx-0 text-start py-3 border-bottom">
-            <Col xs={4}>FULL NAME</Col>
-            <Col xs={8}>
-              <Form.Control onChange={(e) => setFullName(e.target.value)} />
-            </Col>
-          </Row>
-          <Row className="mx-0 text-start py-3 border-bottom">
-            <Col xs={4}>PHONE</Col>
-            <Col>
-              <Form.Control onChange={(e) => setPhone(e.target.value)} />
-            </Col>
-          </Row>
-          <Row className="mx-0 text-start py-3 border-bottom">
-            <Col xs={4}>EMAIL</Col>
-            <Col>
-              <Form.Control onChange={(e) => setEmail(e.target.value)} />
-            </Col>
-          </Row>
-          <Row className="w-25 text-center mx-auto d-flex mt-3">
-            <Button type="submit">Update User</Button>
-          </Row>
-        </Form>
-      </Container>
+          <Form onSubmit={handleSubmit}>
+            <Row className="mx-0 text-start py-3 border-bottom">
+              <Col xs={4}>PHOTO</Col>
+              <Col xs={8}>
+                <Form.Control onChange={handleUploadImage} type="file" />
+              </Col>
+            </Row>
+            <Row className="mx-0 text-start py-3 border-bottom">
+              <Col xs={4}>USERNAME</Col>
+              <Col xs={8}>
+                <Form.Control
+                  defaultValue={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </Col>
+            </Row>
+            <Row className="mx-0 text-start py-3 border-bottom">
+              <Col xs={4}>BIO</Col>
+              <Col xs={8}>
+                <Form.Control
+                  defaultValue={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                />
+              </Col>
+            </Row>
+            <Row className="mx-0 text-start py-3 border-bottom">
+              <Col xs={4}>FULL NAME</Col>
+              <Col xs={8}>
+                <Form.Control
+                  defaultValue={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </Col>
+            </Row>
+            <Row className="mx-0 text-start py-3 border-bottom">
+              <Col xs={4}>PHONE</Col>
+              <Col>
+                <Form.Control
+                  defaultValue={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </Col>
+            </Row>
+            <Row className="mx-0 text-start py-3 border-bottom">
+              <Col xs={4}>EMAIL</Col>
+              <Col>
+                <Form.Control
+                  defaultValue={email}
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Col>
+            </Row>
+            <Row className="w-25 text-center mx-auto d-flex mt-3">
+              <Button type="submit">Update User</Button>
+            </Row>
+          </Form>
+        </Container>
+      )}
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import axios from "axios";
 import React from "react";
 import { useContext } from "react";
-import { useReducer } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
@@ -9,35 +8,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Auth } from "../Reducers.js";
 
-const reducer = (state, action) => {
-  switch (action.payload) {
-    case "POST_REQUEST":
-      return { ...state, loading: true };
-    case "POST_SUCCESS":
-      return { ...state, loading: false };
-    case "POST_FAIL":
-      return { ...state, loading: false };
-    default:
-      return state;
-  }
-};
-
 export default function Login() {
-  const [{ loading }, dispatch] = useReducer(reducer, {
-    loading: true,
-  });
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const { state, dispatch: ctxDispatch } = useContext(Auth);
   const { userInfo } = state;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch({ type: "POST_REQUEST" });
     try {
-      setError("");
       const { data } = await axios.post(
         "http://localhost:5000/api/users/login",
         {
@@ -46,7 +26,6 @@ export default function Login() {
         }
       );
       ctxDispatch({ type: "USER_SIGNIN", payload: data });
-      dispatch({ type: "POST_SUCCESS" });
       localStorage.setItem("userInfo", JSON.stringify(data));
     } catch (err) {
       toast.error("Invalid username or password");
@@ -65,7 +44,6 @@ export default function Login() {
         <p className="mt-2">
           <b>sergioesc Web developer. Authentication App</b>
         </p>
-        <p>Master web developer by making real-life projects</p>
       </Container>
       <Container>
         <Form onSubmit={handleSubmit}>
@@ -94,12 +72,6 @@ export default function Login() {
             </Button>
           </Form.Group>
         </Form>
-
-        <Container>
-          <p className="text-muted my-4 text-center">
-            or continue with these social profile
-          </p>
-        </Container>
       </Container>
     </Container>
   );

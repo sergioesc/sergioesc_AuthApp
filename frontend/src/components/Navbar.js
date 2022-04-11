@@ -40,10 +40,10 @@ export default function NavbarProfile() {
         variant="dark"
       >
         <Container>
-          <Navbar.Brand to="/profile"> sergioesc </Navbar.Brand>
+          <Navbar.Brand> <Link to="/" className="link-style"> sergioesc</Link> </Navbar.Brand>
           <Nav className="ms-auto">
             <NavDropdown title={userInfo.name}>
-              <NavDropdown.Item>My profile</NavDropdown.Item>
+              <NavDropdown.Item><Link to={`/profile/${userInfo._id}`} className="link-style text-dark">My profile</Link></NavDropdown.Item>
               <NavDropdown.Item onClick={handleSignOut}>
                 Log Out
               </NavDropdown.Item>

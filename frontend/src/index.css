@@ -26,4 +26,11 @@ body {
 }
 .link-style{
     text-decoration: none;
+    color: white;
+}
+
+.profile-image{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
 }
