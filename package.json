@@ -1,10 +1,12 @@
 {
   "name": "authapp",
   "version": "1.0.0",
+  "homepage": "https://sergioesc.github.io/sergioesc_AuthApp",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cd backend && npm install && cd d../frontend && npm install && npm run build",
+    "predeploy" : "cd frontend && npm run build",
+    "deploy": "gh-pages -d frontend/build",
     "start": "node backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
