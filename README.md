@@ -2,8 +2,7 @@
 
 # About the project
 
-Is a Auth App created by sergio_esc
-
+Authentication app with ReactJS
 # Build with
   * ReactJS
   * CSS
